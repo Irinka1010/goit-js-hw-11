@@ -29,7 +29,6 @@ function onSearchForm(event) {
     );
     return;
   }
-  newsApiService.resetPage();
 
   newsApiService
     .fetchImages()

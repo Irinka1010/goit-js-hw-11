@@ -1,8 +1,11 @@
 * {
   box-sizing: border-box;
 }
+body{
+  background-color: rgb(209, 237, 214);
+}
 .header {
-  background-color: rgb(18, 24, 171);
+  background-color: rgb(106, 109, 108);
   border-bottom: 1px solid #ececec;
   width: 100vw;
   padding: 15px 0;
@@ -26,6 +29,8 @@ p {
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 25px;
+ 
+  
 
   @media screen and (min-width: 480px) {
     width: 480px;
