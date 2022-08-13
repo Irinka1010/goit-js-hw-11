@@ -13,7 +13,7 @@ const refs = {
   btLoadMore: document.querySelector('.load-more'),
 };
 const newsApiService = new NewApiService();
-
+// const newLoadMoreBtn = new LoadMoreBtn();
 let simpleLightbox = new SimpleLightbox('.gallery a');
 simpleLightbox.refresh();
 
@@ -54,15 +54,24 @@ function onSearchForm(event) {
       }
     })
 
-    .catch(error => console.log(error));
+    .catch(error => handleError());
 }
 function onLoadMore() {
   newsApiService.fetchImages().then(({ data }) => {
     createCollection(data.hits);
+    onPageScrolling();
     simpleLightbox.refresh();
   });
 }
 
 function clearGallery() {
   refs.gallery.innerHTML = '';
+}
+function handleError() {
+  console.log(error);
+}
+function onPageScrolling() {
+  const { height: cardHeight } =
+    refs.gallery.firstElementChild.getBoundingClientRect();
+  window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
 }
