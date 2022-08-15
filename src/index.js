@@ -1,4 +1,5 @@
 import fetchImages from './js/fetch-images';
+import { backToTop, trackScroll } from './js/backButton';
 import { createCollection } from './js/createCollection';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -11,14 +12,17 @@ const refs = {
   submit: document.querySelector('.submit-form'),
   gallery: document.querySelector('.gallery'),
   btLoadMore: document.querySelector('.load-more'),
+  goTopBtn: document.querySelector('.back_to_top'),
 };
 const newsApiService = new NewApiService();
-// const newLoadMoreBtn = new LoadMoreBtn();
-let simpleLightbox = new SimpleLightbox('.gallery a');
+const simpleLightbox = new SimpleLightbox('.gallery a');
 simpleLightbox.refresh();
 
 refs.form.addEventListener('submit', onSearchForm);
 refs.btLoadMore.addEventListener('click', onLoadMore);
+window.addEventListener('scroll', trackScroll);
+refs.goTopBtn.addEventListener('click', backToTop);
+
 function onSearchForm(event) {
   event.preventDefault();
 
@@ -52,7 +56,9 @@ function onSearchForm(event) {
         createCollection(data.hits);
         simpleLightbox.refresh();
         refs.btLoadMore.classList.add('is-hidden');
-        Notify.success("that's all we found");
+        Notify.success(
+          "We're sorry, but you've reached the end of search results"
+        );
       } else {
         Notify.failure('Unknown error');
       }
@@ -64,6 +70,14 @@ function onLoadMore() {
     createCollection(data.hits);
     onPageScrolling();
     simpleLightbox.refresh();
+    if (
+      newsApiService.page === Math.ceil(data.totalHits / newsApiService.perPage)
+    ) {
+      refs.btLoadMore.classList.add('is-hidden');
+      Notify.success(
+        "We're sorry, but you've reached the end of search results"
+      );
+    }
   });
 }
 
