@@ -17,11 +17,10 @@ export default class NewApiService {
       );
       if (respons.status === 200) {
         this.incrementPege();
+        return respons;
       }
-
-      return respons;
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 

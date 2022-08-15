@@ -23,13 +23,11 @@ function onSearchForm(event) {
   event.preventDefault();
 
   newsApiService.query = event.currentTarget.searchQuery.value.trim();
-  if (!newsApiService.query) {
-    Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
+  if (newsApiService.query === '') {
+    Notify.failure('Please enter the name of the picture.');
     return;
   }
-
+  newsApiService.resetPage();
   newsApiService
     .fetchImages()
     .then(({ data }) => {
@@ -37,23 +35,29 @@ function onSearchForm(event) {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
-      } else {
+        return;
+      } else if (
+        newsApiService.page < Math.ceil(data.totalHits / newsApiService.perPage)
+      ) {
         clearGallery();
-
         createCollection(data.hits);
         simpleLightbox.refresh();
         Notify.success(`Hooray! We found ${data.totalHits} images.`);
-      }
-      if (
-        newsApiService.page < Math.ceil(data.totalHits / newsApiService.perPage)
-      ) {
         refs.btLoadMore.classList.remove('is-hidden');
-      } else {
+      } else if (
+        newsApiService.page >=
+        Math.ceil(data.totalHits / newsApiService.perPage)
+      ) {
+        clearGallery();
+        createCollection(data.hits);
+        simpleLightbox.refresh();
         refs.btLoadMore.classList.add('is-hidden');
+        Notify.success("that's all we found");
+      } else {
+        Notify.failure('Unknown error');
       }
     })
-
-    .catch(error => handleError());
+    .catch(handleError);
 }
 function onLoadMore() {
   newsApiService.fetchImages().then(({ data }) => {
@@ -69,6 +73,7 @@ function clearGallery() {
 function handleError() {
   console.log(error);
 }
+
 function onPageScrolling() {
   const { height: cardHeight } =
     refs.gallery.firstElementChild.getBoundingClientRect();
