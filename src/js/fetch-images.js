@@ -11,17 +11,15 @@ export default class NewApiService {
     this.perPage = 40;
   }
   async fetchImages() {
-    try {
-      const respons = await axios.get(
-        `?key=${KEY_API}&q=${this.searchQuery}&${FILTER_RESPONSE}&page=${this.page}&per_page=${this.perPage}`
-      );
-      if (respons.status === 200) {
-        this.incrementPege();
-        return respons;
-      }
-    } catch (error) {
-      console.log(error.message);
+    const respons = await axios.get(
+      `?key=${KEY_API}&q=${this.searchQuery}&${FILTER_RESPONSE}&page=${this.page}&per_page=${this.perPage}`
+    );
+    if (respons.status === 200) {
+      this.incrementPege();
+      return respons;
     }
+
+    return respons;
   }
 
   incrementPege() {

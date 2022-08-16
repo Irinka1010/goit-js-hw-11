@@ -1,5 +1,5 @@
 export { createCollection };
-import { refs } from '../index';
+import { refs } from '../js/getRefs';
 function createCollection(items) {
   const markup = items
     .map(item => {

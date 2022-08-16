@@ -1,3 +1,4 @@
+import { refs } from './js/getRefs';
 import fetchImages from './js/fetch-images';
 import { backToTop, trackScroll } from './js/backButton';
 import { createCollection } from './js/createCollection';
@@ -6,14 +7,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import NewApiService from './js/fetch-images';
 
-export { refs };
-const refs = {
-  form: document.querySelector('#search-form'),
-  submit: document.querySelector('.submit-form'),
-  gallery: document.querySelector('.gallery'),
-  btLoadMore: document.querySelector('.load-more'),
-  goTopBtn: document.querySelector('.back_to_top'),
-};
 const newsApiService = new NewApiService();
 const simpleLightbox = new SimpleLightbox('.gallery a');
 simpleLightbox.refresh();
