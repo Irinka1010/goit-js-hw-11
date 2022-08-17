@@ -14,12 +14,8 @@ export default class NewApiService {
     const respons = await axios.get(
       `?key=${KEY_API}&q=${this.searchQuery}&${FILTER_RESPONSE}&page=${this.page}&per_page=${this.perPage}`
     );
-    if (respons.status === 200) {
-      this.incrementPege();
-      return respons;
-    }
 
-    return respons;
+    return respons.data;
   }
 
   incrementPege() {
