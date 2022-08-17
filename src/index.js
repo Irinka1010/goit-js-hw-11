@@ -1,4 +1,4 @@
-import { refs } from './js/getRefs';
+import refs from './js/getRefs';
 import fetchImages from './js/fetch-images';
 import { backToTop, trackScroll } from './js/backButton';
 import { createCollection } from './js/createCollection';
@@ -10,7 +10,6 @@ import NewApiService from './js/fetch-images';
 
 const newsApiService = new NewApiService();
 const simpleLightbox = new SimpleLightbox('.gallery a');
-simpleLightbox.refresh();
 
 refs.form.addEventListener('submit', onSearchForm);
 refs.btLoadMore.addEventListener('click', onLoadMore);
@@ -37,22 +36,23 @@ async function onSearchForm(event) {
         );
         return;
       }
-      countAndIncrementPages(totalHits);
-      clearGallery();
+
       createCollection(hits);
       simpleLightbox.refresh();
       Notify.success(`Hooray! We found ${totalHits} images.`);
+      countAndIncrementPages(totalHits);
     } catch (error) {
       console.log(error.message);
     }
   }
 }
 async function onLoadMore() {
-  const { hits, totalHits } = await newsApiService.fetchImages();
   try {
+    const { hits, totalHits } = await newsApiService.fetchImages();
     createCollection(hits);
-    onPageScrolling();
     simpleLightbox.refresh();
+    onHideButton();
+    onPageScrolling();
     countAndIncrementPages(totalHits);
   } catch (error) {
     console.log(error.message);
@@ -82,9 +82,6 @@ function onShowsButton() {
 
 function clearGallery() {
   refs.gallery.innerHTML = '';
-}
-function handleError() {
-  console.log(error);
 }
 
 function onPageScrolling() {

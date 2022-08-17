@@ -1,4 +1,4 @@
-import { refs } from '../js/getRefs';
+import refs from '../js/getRefs';
 function trackScroll() {
   const scroll = window.pageYOffset;
   const coords = document.documentElement.clientHeight;
